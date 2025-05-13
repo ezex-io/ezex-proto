@@ -7,15 +7,15 @@ option go_package = "github.com/ezex-io/ezex-proto/go/users";
 service UsersService {
   rpc SaveSecurityImage(SaveSecurityImageRequest) returns (SaveSecurityImageResponse) {}
   rpc GetSecurityImage(GetSecurityImageRequest) returns (GetSecurityImageResponse) {}
-  rpc ProcessFirebaseLogin(ProcessFirebaseLoginRequest) returns (ProcessFirebaseLoginResponse) {}
+  rpc ProcessLogin(ProcessLoginRequest) returns (ProcessLoginResponse) {}
 }
 
-message ProcessFirebaseLoginRequest {
+message ProcessLoginRequest {
   string firebase_user_id = 1;
   string email = 2;
 }
 
-message ProcessFirebaseLoginResponse {
+message ProcessLoginResponse {
   string user_id = 1;
 }
 
