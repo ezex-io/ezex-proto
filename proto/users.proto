@@ -11,6 +11,17 @@ service UsersService {
 
   // GetSecurityImage retrieves a security image by its ID.
   rpc GetSecurityImage(GetSecurityImageRequest) returns (GetSecurityImageResponse) {}
+
+  rpc ProcessFirebaseLogin(ProcessFirebaseLoginRequest) returns (ProcessFirebaseLoginResponse) {}
+}
+
+message ProcessFirebaseLoginRequest {
+  string firebase_user_id = 1;
+  string email = 2;
+}
+
+message ProcessFirebaseLoginResponse {
+  string user_id = 1;
 }
 
 // SaveSecurityImageRequest represents a request to save a security image.

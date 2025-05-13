@@ -19,8 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	UsersService_SaveSecurityImage_FullMethodName = "/ezex_users.UsersService/SaveSecurityImage"
-	UsersService_GetSecurityImage_FullMethodName  = "/ezex_users.UsersService/GetSecurityImage"
+	UsersService_SaveSecurityImage_FullMethodName    = "/ezex_users.UsersService/SaveSecurityImage"
+	UsersService_GetSecurityImage_FullMethodName     = "/ezex_users.UsersService/GetSecurityImage"
+	UsersService_ProcessFirebaseLogin_FullMethodName = "/ezex_users.UsersService/ProcessFirebaseLogin"
 )
 
 // UsersServiceClient is the client API for UsersService service.
@@ -33,6 +34,7 @@ type UsersServiceClient interface {
 	SaveSecurityImage(ctx context.Context, in *SaveSecurityImageRequest, opts ...grpc.CallOption) (*SaveSecurityImageResponse, error)
 	// GetSecurityImage retrieves a security image by its ID.
 	GetSecurityImage(ctx context.Context, in *GetSecurityImageRequest, opts ...grpc.CallOption) (*GetSecurityImageResponse, error)
+	ProcessFirebaseLogin(ctx context.Context, in *ProcessFirebaseLoginRequest, opts ...grpc.CallOption) (*ProcessFirebaseLoginResponse, error)
 }
 
 type usersServiceClient struct {
@@ -63,6 +65,16 @@ func (c *usersServiceClient) GetSecurityImage(ctx context.Context, in *GetSecuri
 	return out, nil
 }
 
+func (c *usersServiceClient) ProcessFirebaseLogin(ctx context.Context, in *ProcessFirebaseLoginRequest, opts ...grpc.CallOption) (*ProcessFirebaseLoginResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ProcessFirebaseLoginResponse)
+	err := c.cc.Invoke(ctx, UsersService_ProcessFirebaseLogin_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UsersServiceServer is the server API for UsersService service.
 // All implementations must embed UnimplementedUsersServiceServer
 // for forward compatibility.
@@ -73,6 +85,7 @@ type UsersServiceServer interface {
 	SaveSecurityImage(context.Context, *SaveSecurityImageRequest) (*SaveSecurityImageResponse, error)
 	// GetSecurityImage retrieves a security image by its ID.
 	GetSecurityImage(context.Context, *GetSecurityImageRequest) (*GetSecurityImageResponse, error)
+	ProcessFirebaseLogin(context.Context, *ProcessFirebaseLoginRequest) (*ProcessFirebaseLoginResponse, error)
 	mustEmbedUnimplementedUsersServiceServer()
 }
 
@@ -88,6 +101,9 @@ func (UnimplementedUsersServiceServer) SaveSecurityImage(context.Context, *SaveS
 }
 func (UnimplementedUsersServiceServer) GetSecurityImage(context.Context, *GetSecurityImageRequest) (*GetSecurityImageResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetSecurityImage not implemented")
+}
+func (UnimplementedUsersServiceServer) ProcessFirebaseLogin(context.Context, *ProcessFirebaseLoginRequest) (*ProcessFirebaseLoginResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ProcessFirebaseLogin not implemented")
 }
 func (UnimplementedUsersServiceServer) mustEmbedUnimplementedUsersServiceServer() {}
 func (UnimplementedUsersServiceServer) testEmbeddedByValue()                      {}
@@ -146,6 +162,24 @@ func _UsersService_GetSecurityImage_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UsersService_ProcessFirebaseLogin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ProcessFirebaseLoginRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UsersServiceServer).ProcessFirebaseLogin(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UsersService_ProcessFirebaseLogin_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UsersServiceServer).ProcessFirebaseLogin(ctx, req.(*ProcessFirebaseLoginRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UsersService_ServiceDesc is the grpc.ServiceDesc for UsersService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -160,6 +194,10 @@ var UsersService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetSecurityImage",
 			Handler:    _UsersService_GetSecurityImage_Handler,
+		},
+		{
+			MethodName: "ProcessFirebaseLogin",
+			Handler:    _UsersService_ProcessFirebaseLogin_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
