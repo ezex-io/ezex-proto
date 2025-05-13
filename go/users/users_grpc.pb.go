@@ -27,12 +27,8 @@ const (
 // UsersServiceClient is the client API for UsersService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-//
-// UsersService provides operations for managing users.
 type UsersServiceClient interface {
-	// SaveSecurityImage saves a new security image for a user.
 	SaveSecurityImage(ctx context.Context, in *SaveSecurityImageRequest, opts ...grpc.CallOption) (*SaveSecurityImageResponse, error)
-	// GetSecurityImage retrieves a security image by its ID.
 	GetSecurityImage(ctx context.Context, in *GetSecurityImageRequest, opts ...grpc.CallOption) (*GetSecurityImageResponse, error)
 	ProcessFirebaseLogin(ctx context.Context, in *ProcessFirebaseLoginRequest, opts ...grpc.CallOption) (*ProcessFirebaseLoginResponse, error)
 }
@@ -78,12 +74,8 @@ func (c *usersServiceClient) ProcessFirebaseLogin(ctx context.Context, in *Proce
 // UsersServiceServer is the server API for UsersService service.
 // All implementations must embed UnimplementedUsersServiceServer
 // for forward compatibility.
-//
-// UsersService provides operations for managing users.
 type UsersServiceServer interface {
-	// SaveSecurityImage saves a new security image for a user.
 	SaveSecurityImage(context.Context, *SaveSecurityImageRequest) (*SaveSecurityImageResponse, error)
-	// GetSecurityImage retrieves a security image by its ID.
 	GetSecurityImage(context.Context, *GetSecurityImageRequest) (*GetSecurityImageResponse, error)
 	ProcessFirebaseLogin(context.Context, *ProcessFirebaseLoginRequest) (*ProcessFirebaseLoginResponse, error)
 	mustEmbedUnimplementedUsersServiceServer()
