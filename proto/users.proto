@@ -1,22 +1,14 @@
 syntax = "proto3";
 
-package ezex_users;
+package users;
 
 option go_package = "github.com/ezex-io/ezex-proto/go/users";
 
 service UsersService {
   rpc SaveSecurityImage(SaveSecurityImageRequest) returns (SaveSecurityImageResponse) {}
   rpc GetSecurityImage(GetSecurityImageRequest) returns (GetSecurityImageResponse) {}
-  rpc ProcessLogin(ProcessLoginRequest) returns (ProcessLoginResponse) {}
-}
-
-message ProcessLoginRequest {
-  string firebase_user_id = 1;
-  string email = 2;
-}
-
-message ProcessLoginResponse {
-  string user_id = 1;
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse) {}
+  rpc GetUserByEmail(GetUserByEmailRequest) returns (GetUserByEmailResponse) {}
 }
 
 message SaveSecurityImageRequest {
@@ -25,13 +17,33 @@ message SaveSecurityImageRequest {
   string security_phrase = 3;
 }
 
-message SaveSecurityImageResponse {}
+message SaveSecurityImageResponse {
+  string email = 1;
+}
 
 message GetSecurityImageRequest {
   string email = 1;
 }
 
 message GetSecurityImageResponse {
-   string security_image = 2;
-   string security_phrase = 3;
+  string email = 1;
+  string security_image = 2;
+  string security_phrase = 3;
+}
+
+message CreateUserRequest {
+  string firebase_uid = 1;
+  string email = 2;
+}
+
+message CreateUserResponse {
+  string user_id = 1;
+}
+
+message GetUserByEmailRequest {
+  string email = 1;
+}
+
+message GetUserByEmailResponse {
+  string email = 1;
 }

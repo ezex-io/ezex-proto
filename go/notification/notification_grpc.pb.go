@@ -4,7 +4,7 @@
 // - protoc             v3.12.4
 // source: notification.proto
 
-package users
+package notification
 
 import (
 	context "context"
@@ -19,14 +19,14 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	NotificationService_SendEmail_FullMethodName = "/ezex_notification.NotificationService/SendEmail"
+	NotificationService_SendTemplatedEmail_FullMethodName = "/notification.NotificationService/SendTemplatedEmail"
 )
 
 // NotificationServiceClient is the client API for NotificationService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type NotificationServiceClient interface {
-	SendEmail(ctx context.Context, in *SendEmailRequest, opts ...grpc.CallOption) (*SendEmailResponse, error)
+	SendTemplatedEmail(ctx context.Context, in *SendTemplatedEmailRequest, opts ...grpc.CallOption) (*SendTemplatedEmailResponse, error)
 }
 
 type notificationServiceClient struct {
@@ -37,10 +37,10 @@ func NewNotificationServiceClient(cc grpc.ClientConnInterface) NotificationServi
 	return &notificationServiceClient{cc}
 }
 
-func (c *notificationServiceClient) SendEmail(ctx context.Context, in *SendEmailRequest, opts ...grpc.CallOption) (*SendEmailResponse, error) {
+func (c *notificationServiceClient) SendTemplatedEmail(ctx context.Context, in *SendTemplatedEmailRequest, opts ...grpc.CallOption) (*SendTemplatedEmailResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(SendEmailResponse)
-	err := c.cc.Invoke(ctx, NotificationService_SendEmail_FullMethodName, in, out, cOpts...)
+	out := new(SendTemplatedEmailResponse)
+	err := c.cc.Invoke(ctx, NotificationService_SendTemplatedEmail_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +51,7 @@ func (c *notificationServiceClient) SendEmail(ctx context.Context, in *SendEmail
 // All implementations must embed UnimplementedNotificationServiceServer
 // for forward compatibility.
 type NotificationServiceServer interface {
-	SendEmail(context.Context, *SendEmailRequest) (*SendEmailResponse, error)
+	SendTemplatedEmail(context.Context, *SendTemplatedEmailRequest) (*SendTemplatedEmailResponse, error)
 	mustEmbedUnimplementedNotificationServiceServer()
 }
 
@@ -62,8 +62,8 @@ type NotificationServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedNotificationServiceServer struct{}
 
-func (UnimplementedNotificationServiceServer) SendEmail(context.Context, *SendEmailRequest) (*SendEmailResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SendEmail not implemented")
+func (UnimplementedNotificationServiceServer) SendTemplatedEmail(context.Context, *SendTemplatedEmailRequest) (*SendTemplatedEmailResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SendTemplatedEmail not implemented")
 }
 func (UnimplementedNotificationServiceServer) mustEmbedUnimplementedNotificationServiceServer() {}
 func (UnimplementedNotificationServiceServer) testEmbeddedByValue()                             {}
@@ -86,20 +86,20 @@ func RegisterNotificationServiceServer(s grpc.ServiceRegistrar, srv Notification
 	s.RegisterService(&NotificationService_ServiceDesc, srv)
 }
 
-func _NotificationService_SendEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SendEmailRequest)
+func _NotificationService_SendTemplatedEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SendTemplatedEmailRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(NotificationServiceServer).SendEmail(ctx, in)
+		return srv.(NotificationServiceServer).SendTemplatedEmail(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: NotificationService_SendEmail_FullMethodName,
+		FullMethod: NotificationService_SendTemplatedEmail_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NotificationServiceServer).SendEmail(ctx, req.(*SendEmailRequest))
+		return srv.(NotificationServiceServer).SendTemplatedEmail(ctx, req.(*SendTemplatedEmailRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -108,12 +108,12 @@ func _NotificationService_SendEmail_Handler(srv interface{}, ctx context.Context
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var NotificationService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "ezex_notification.NotificationService",
+	ServiceName: "notification.NotificationService",
 	HandlerType: (*NotificationServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SendEmail",
-			Handler:    _NotificationService_SendEmail_Handler,
+			MethodName: "SendTemplatedEmail",
+			Handler:    _NotificationService_SendTemplatedEmail_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
