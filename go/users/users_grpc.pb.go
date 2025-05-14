@@ -19,9 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	UsersService_SaveSecurityImage_FullMethodName = "/ezex_users.UsersService/SaveSecurityImage"
-	UsersService_GetSecurityImage_FullMethodName  = "/ezex_users.UsersService/GetSecurityImage"
-	UsersService_ProcessLogin_FullMethodName      = "/ezex_users.UsersService/ProcessLogin"
+	UsersService_SaveSecurityImage_FullMethodName = "/users.UsersService/SaveSecurityImage"
+	UsersService_GetSecurityImage_FullMethodName  = "/users.UsersService/GetSecurityImage"
+	UsersService_CreateUser_FullMethodName        = "/users.UsersService/CreateUser"
+	UsersService_GetUserByEmail_FullMethodName    = "/users.UsersService/GetUserByEmail"
 )
 
 // UsersServiceClient is the client API for UsersService service.
@@ -30,7 +31,8 @@ const (
 type UsersServiceClient interface {
 	SaveSecurityImage(ctx context.Context, in *SaveSecurityImageRequest, opts ...grpc.CallOption) (*SaveSecurityImageResponse, error)
 	GetSecurityImage(ctx context.Context, in *GetSecurityImageRequest, opts ...grpc.CallOption) (*GetSecurityImageResponse, error)
-	ProcessLogin(ctx context.Context, in *ProcessLoginRequest, opts ...grpc.CallOption) (*ProcessLoginResponse, error)
+	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error)
+	GetUserByEmail(ctx context.Context, in *GetUserByEmailRequest, opts ...grpc.CallOption) (*GetUserByEmailResponse, error)
 }
 
 type usersServiceClient struct {
@@ -61,10 +63,20 @@ func (c *usersServiceClient) GetSecurityImage(ctx context.Context, in *GetSecuri
 	return out, nil
 }
 
-func (c *usersServiceClient) ProcessLogin(ctx context.Context, in *ProcessLoginRequest, opts ...grpc.CallOption) (*ProcessLoginResponse, error) {
+func (c *usersServiceClient) CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ProcessLoginResponse)
-	err := c.cc.Invoke(ctx, UsersService_ProcessLogin_FullMethodName, in, out, cOpts...)
+	out := new(CreateUserResponse)
+	err := c.cc.Invoke(ctx, UsersService_CreateUser_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *usersServiceClient) GetUserByEmail(ctx context.Context, in *GetUserByEmailRequest, opts ...grpc.CallOption) (*GetUserByEmailResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetUserByEmailResponse)
+	err := c.cc.Invoke(ctx, UsersService_GetUserByEmail_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -77,7 +89,8 @@ func (c *usersServiceClient) ProcessLogin(ctx context.Context, in *ProcessLoginR
 type UsersServiceServer interface {
 	SaveSecurityImage(context.Context, *SaveSecurityImageRequest) (*SaveSecurityImageResponse, error)
 	GetSecurityImage(context.Context, *GetSecurityImageRequest) (*GetSecurityImageResponse, error)
-	ProcessLogin(context.Context, *ProcessLoginRequest) (*ProcessLoginResponse, error)
+	CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error)
+	GetUserByEmail(context.Context, *GetUserByEmailRequest) (*GetUserByEmailResponse, error)
 	mustEmbedUnimplementedUsersServiceServer()
 }
 
@@ -94,8 +107,11 @@ func (UnimplementedUsersServiceServer) SaveSecurityImage(context.Context, *SaveS
 func (UnimplementedUsersServiceServer) GetSecurityImage(context.Context, *GetSecurityImageRequest) (*GetSecurityImageResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetSecurityImage not implemented")
 }
-func (UnimplementedUsersServiceServer) ProcessLogin(context.Context, *ProcessLoginRequest) (*ProcessLoginResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ProcessLogin not implemented")
+func (UnimplementedUsersServiceServer) CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateUser not implemented")
+}
+func (UnimplementedUsersServiceServer) GetUserByEmail(context.Context, *GetUserByEmailRequest) (*GetUserByEmailResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserByEmail not implemented")
 }
 func (UnimplementedUsersServiceServer) mustEmbedUnimplementedUsersServiceServer() {}
 func (UnimplementedUsersServiceServer) testEmbeddedByValue()                      {}
@@ -154,20 +170,38 @@ func _UsersService_GetSecurityImage_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
-func _UsersService_ProcessLogin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ProcessLoginRequest)
+func _UsersService_CreateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateUserRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UsersServiceServer).ProcessLogin(ctx, in)
+		return srv.(UsersServiceServer).CreateUser(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: UsersService_ProcessLogin_FullMethodName,
+		FullMethod: UsersService_CreateUser_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UsersServiceServer).ProcessLogin(ctx, req.(*ProcessLoginRequest))
+		return srv.(UsersServiceServer).CreateUser(ctx, req.(*CreateUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UsersService_GetUserByEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserByEmailRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UsersServiceServer).GetUserByEmail(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UsersService_GetUserByEmail_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UsersServiceServer).GetUserByEmail(ctx, req.(*GetUserByEmailRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -176,7 +210,7 @@ func _UsersService_ProcessLogin_Handler(srv interface{}, ctx context.Context, de
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var UsersService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "ezex_users.UsersService",
+	ServiceName: "users.UsersService",
 	HandlerType: (*UsersServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -188,8 +222,12 @@ var UsersService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _UsersService_GetSecurityImage_Handler,
 		},
 		{
-			MethodName: "ProcessLogin",
-			Handler:    _UsersService_ProcessLogin_Handler,
+			MethodName: "CreateUser",
+			Handler:    _UsersService_CreateUser_Handler,
+		},
+		{
+			MethodName: "GetUserByEmail",
+			Handler:    _UsersService_GetUserByEmail_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
