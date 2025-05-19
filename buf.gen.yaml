@@ -21,6 +21,7 @@ plugins:
   - remote: buf.build/community/neoeinstein-prost:v0.4.0
     out: gen/rust/src
     opt:
+      - paths=source_relative 
       - compile_well_known_types
       - bytes=.
       - extern_path=.google.protobuf=::prost_typesciteturn1search1
@@ -29,9 +30,7 @@ plugins:
   - remote: buf.build/community/neoeinstein-tonic:v0.4.1
     out: gen/rust/src
     opt:
+      - paths=source_relative 
       - compile_well_known_types
       - extern_path=.google.protobuf=::prost_typesciteturn3search0
 
-  # ─── Rust: Serde JSON support (optional) ───────
-  - remote: buf.build/community/neoeinstein-prost-serde:v0.3.1
-    out: gen/rust/srcciteturn1search5
