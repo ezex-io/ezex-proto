@@ -1,20 +1,37 @@
-version: v1
-plugins: 
-  - plugin: go
+version: v2
+clean: true
+
+inputs:
+  - directory: proto
+
+plugins:
+  # ─── Go codegen ───────────────────────────────
+  - remote: buf.build/protocolbuffers/go:v1.28.1
     out: gen/go
-    opt: paths=source_relative
+    opt:
+      - paths=source_relative
 
-  - plugin: go-grpc
+  - remote: buf.build/grpc/go:v1.2.0
     out: gen/go
-    opt: paths=source_relative
+    opt:
+      - paths=source_relative
+      - require_unimplemented_servers=false
 
-  - plugin: prost
-    out: gen/rust
-    
+  # ─── Rust: Prost (core messages) ───────────────
+  - remote: buf.build/community/neoeinstein-prost:v0.4.0
+    out: gen/rust/src
+    opt:
+      - compile_well_known_types
+      - bytes=.
+      - extern_path=.google.protobuf=::prost_typesciteturn1search1
 
-  - plugin: prost-crate
-    out: gen/rust
-    
+  # ─── Rust: Tonic (gRPC services) ───────────────
+  - remote: buf.build/community/neoeinstein-tonic:v0.4.1
+    out: gen/rust/src
+    opt:
+      - compile_well_known_types
+      - extern_path=.google.protobuf=::prost_typesciteturn3search0
 
-managed:
-  enabled: false
+  # ─── Rust: Serde JSON support (optional) ───────
+  - remote: buf.build/community/neoeinstein-prost-serde:v0.3.1
+    out: gen/rust/srcciteturn1search5
