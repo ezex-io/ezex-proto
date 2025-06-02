@@ -1,68 +1,28 @@
-version: v1
-managed:
-  enabled: true
+version: v2
 
 plugins:
-  - name: go
-    out: go/notification
-    opt:
-      - paths=source_relative
+  # Go: Notification
+  - remote: buf.build/grpc/go:v1.5.1
+    out: ./go/notification
+    include:
+      - proto/notification.proto
+    opt: paths=source_relative,require_unimplemented_servers=false
 
-  - name: go-grpc
-    out: go/notification
-    opt:
-      - paths=source_relative
-      - require_unimplemented_servers=false
+  # Go: Users
+  - remote: buf.build/grpc/go:v1.5.1
+    out: ./go/users
+    include:
+      - proto/users.proto
+    opt: paths=source_relative,require_unimplemented_servers=false
 
-  - name: go
-    out: go/users
-    opt:
-      - paths=source_relative
+  # Rust: Notification
+  - remote: buf.build/community/neoeinstein-tonic:v0.4.1
+    out: ./rust/notification
+    include:
+      - proto/notification.proto
 
-  - name: go-grpc
-    out: go/users
-    opt:
-      - paths=source_relative
-      - require_unimplemented_servers=false
-
-  - plugin: buf.build/community/neoeinstein-prost:v0.2.3
-    out: rust/notification/src
-    opt:
-      - paths=source_relative
-      - compile_well_known_types
-      - extern_path=.google.protobuf=::pbjson_types
-
-  - plugin: buf.build/community/neoeinstein-tonic:v0.3.0
-    out: rust/notification/src
-    opt:
-      - compile_well_known_types
-      - extern_path=.google.protobuf=::pbjson_types
-      - emit_oneof
-      - no_server
-
-  - plugin: buf.build/community/neoeinstein-prost-crate:v0.4.1
-    out: rust/notification
-    opt:
-      - gen_crate=./rust/notification/Cargo.toml
-      - include_file=src/lib.rs
-
-  - plugin: buf.build/community/neoeinstein-prost:v0.2.3
-    out: rust/users/src
-    opt:
-      - paths=source_relative
-      - compile_well_known_types
-      - extern_path=.google.protobuf=::pbjson_types
-
-  - plugin: buf.build/community/neoeinstein-tonic:v0.3.0
-    out: rust/users/src
-    opt:
-      - compile_well_known_types
-      - extern_path=.google.protobuf=::pbjson_types
-      - emit_oneof
-      - no_server
-
-  - plugin: buf.build/community/neoeinstein-prost-crate:v0.4.1
-    out: rust/users
-    opt:
-      - gen_crate=./rust/users/Cargo.toml
-      - include_file=src/lib.rs
+  # Rust: Users
+  - remote: buf.build/community/neoeinstein-tonic:v0.4.1
+    out: ./rust/users
+    include:
+      - proto/users.proto
