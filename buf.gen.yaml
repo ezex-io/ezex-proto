@@ -1,0 +1,28 @@
+version: v2
+
+plugins:
+  # Go: Notification
+  - remote: buf.build/grpc/go:v1.5.1
+    out: ./go/notification
+    include:
+      - proto/notification.proto
+    opt: paths=source_relative,require_unimplemented_servers=false
+
+  # Go: Users
+  - remote: buf.build/grpc/go:v1.5.1
+    out: ./go/users
+    include:
+      - proto/users.proto
+    opt: paths=source_relative,require_unimplemented_servers=false
+
+  # Rust: Notification
+  - remote: buf.build/community/neoeinstein-tonic:v0.4.1
+    out: ./rust/notification
+    include:
+      - proto/notification.proto
+
+  # Rust: Users
+  - remote: buf.build/community/neoeinstein-tonic:v0.4.1
+    out: ./rust/users
+    include:
+      - proto/users.proto
